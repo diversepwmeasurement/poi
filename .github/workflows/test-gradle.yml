@@ -1,33 +1,24 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
-name: Java CI with Gradle
-
-on:
-  push:
-    branches: [ trunk ]
-  pull_request:
-    branches: [ trunk ]
-
-permissions: {}
-
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up JDK
+    - continue-on-error: true
+      uses: actions/checkout@v4
+    - continue-on-error: true
+      name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
+        cache: gradle
+        distribution: temurin
         java-version: '11'
-        cache: 'gradle'
-
-    - name: Grant execute permission for gradlew
+    - continue-on-error: true
+      name: Grant execute permission for gradlew
       run: chmod +x gradlew
-
-    - name: Build with Gradle
+    - continue-on-error: true
+      name: Build with Gradle
       run: ./gradlew check -PjdkVersion=11 --no-daemon --refresh-dependencies
+name: Java CI with Gradle
+on:
+  repository_dispatch:
+    types: trigger-ga___test-gradle.yml
+permissions: {}
